@@ -55,6 +55,7 @@ def sfmt(style, text):
         return colored(text, "dark_grey")
     if style == "highlight":
         return colored(text, "white", "on_blue")
+    raise ValueError(f"Unknown style {style!r}")
 
 
 def sprint(style, text):
