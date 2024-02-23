@@ -12,7 +12,6 @@ from kanji import Kanji
 warnings.simplefilter(action="ignore", category=FutureWarning)
 import pandas as pd
 
-
 KANJI_LIST = {
     "青": "せい",
     "清": "せい",
@@ -47,8 +46,7 @@ def bad(text):
     return colored(text, "red", attrs=["bold"])
 
 
-def main():
-    kanji_list = load_kanji_list()
+def compare_guesses(kanji_list):
     bad_count, good_count = 0, 0
 
     for kanji, correct_reading in kanji_list.items():
@@ -63,12 +61,11 @@ def main():
 
     print("{:.0%} complete".format(good_count / len(kanji_list)))
 
-    from pprint import pprint
 
-    # pprint(allk)
+def main():
+    kanji_list = load_kanji_list()
 
-    for kanji in allk[:10]:
-        print(kanji.character, kanji.onyomi)
+    compare_guesses(kanji_list)
 
 
 if __name__ == "__main__":
