@@ -7,6 +7,7 @@ import numpy as np
 
 from jstring import katakana_to_hiragana
 from kanji import Kanji
+from krad import get_krads
 
 # fix pandas pyarrow warning
 warnings.simplefilter(action="ignore", category=FutureWarning)
@@ -21,6 +22,7 @@ def load_all_kanji():
 
 
 allk = load_all_kanji()
+allkrads = get_krads()
 
 
 def print_most_common_readings():
@@ -100,12 +102,22 @@ def print_radical_to_reading_table():
     print("{} radicals printed".format(len(radical_influence)))
 
 
+def print_all_krad_parts():
+    allparts = set()
+    for kanji, parts in allkrads.items():
+        allparts.update(parts)
+
+    print("".join(allparts))
+    print("Found", len(allparts), "parts")
+
+
 def main():
     # print_most_common_readings()
     # print_most_common_radicals()
     # print_most_influental_radicals()
     # most_common_reading_for_radical()
-    print_radical_to_reading_table()
+    # print_radical_to_reading_table()
+    print_all_krad_parts()
 
 
 if __name__ == "__main__":
