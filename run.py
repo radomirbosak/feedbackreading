@@ -89,14 +89,16 @@ def print_kanji_status(kanji, guess, correct_readings, is_correct):
             colored_readings.append(reading)
     colored_readings = " ".join(colored_readings)
     colored_guess = sfmt("good" if is_correct else "bad", guess)
+    colored_index = sfmt("note", f"{kanji.index:>4}.")
 
     ctx = dict(
+        idx=colored_index,
         char=kanji.character,
         rad=kanji.radical,
         guess=colored_guess,
         correct=colored_readings,
     )
-    line = "{char} ({rad}) {guess} -> {correct}"
+    line = "{idx} {char} ({rad}) {guess} -> {correct}"
     print(line.format(**ctx))
 
 
