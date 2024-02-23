@@ -25,3 +25,8 @@ For a single evaluation.
 ## Screenshot
 
 ![screenshot](screenshot.png)
+
+## Data sources
+
+* https://github.com/Pomax/node-kanji-relations/blob/master/index.js
+* https://github.com/jmettraux/kensaku/blob/master/data/kradfile-u
