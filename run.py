@@ -54,18 +54,27 @@ def compare_guesses(kanji_list):
         guess = guess_reading(kanji)
         try:
             correct_reading = kanji.onyomi[0].text
+            # correct_reading = ",".join([on.text for on in kanji.onyomi])
             # print(type(correct_reading))
             correct_reading = katakana_to_hiragana(correct_reading)
         except IndexError:
             no_onyomi_count += 1
             continue
 
+        ctx = dict(
+            char=kanji.character,
+            guess=guess,
+            good_guess=good(guess),
+            bad_guess=bad(guess),
+            correct=correct_reading,
+        )
         if guess == correct_reading:
-            print(kanji.character, good(guess))
+            line = "{char} {good_guess}"
             good_count += 1
         else:
-            print(kanji.character, bad(guess), "->", correct_reading)
+            line = "{char} {bad_guess} -> {correct}"
             bad_count += 1
+        print(line.format(**ctx))
 
     print("Kanji without any onyomi: {}/{}".format(no_onyomi_count, len(kanji_list)))
     total_eligible = len(kanji_list) - no_onyomi_count
