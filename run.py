@@ -72,16 +72,17 @@ def compare_guesses(kanji_list):
 
         ctx = dict(
             char=kanji.character,
+            rad=kanji.radical,
             guess=guess,
             good_guess=sfmt("good", guess),
             bad_guess=sfmt("bad", guess),
             correct=correct_reading,
         )
         if guess == correct_reading:
-            line = "{char} {good_guess}"
+            line = "{char} ({rad}) {good_guess}"
             good_count += 1
         else:
-            line = "{char} {bad_guess} -> {correct}"
+            line = "{char} ({rad}) {bad_guess} -> {correct}"
             bad_count += 1
         print(line.format(**ctx))
 
