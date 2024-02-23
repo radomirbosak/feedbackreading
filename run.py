@@ -6,6 +6,7 @@ import warnings
 import numpy as np
 from termcolor import colored
 
+from jstring import katakana_to_hiragana
 from kanji import Kanji
 
 # fix pandas pyarrow warning
@@ -48,12 +49,15 @@ def bad(text):
 
 def compare_guesses(kanji_list):
     bad_count, good_count = 0, 0
-
+    no_onyomi_count = 0
     for kanji in kanji_list:
         guess = guess_reading(kanji)
         try:
-            correct_reading = kanji.onyomi[0]
+            correct_reading = kanji.onyomi[0].text
+            # print(type(correct_reading))
+            correct_reading = katakana_to_hiragana(correct_reading)
         except IndexError:
+            no_onyomi_count += 1
             continue
 
         if guess == correct_reading:
@@ -63,12 +67,13 @@ def compare_guesses(kanji_list):
             print(kanji.character, bad(guess), "->", correct_reading)
             bad_count += 1
 
-    print("{:.2%} complete".format(good_count / len(kanji_list)))
+    print("Kanji without any onyomi: {}/{}".format(no_onyomi_count, len(kanji_list)))
+    total_eligible = len(kanji_list) - no_onyomi_count
+    print("{:.2%} complete".format(good_count / total_eligible))
 
 
 def main():
     kanji_list = load_kanji_list()
-
     compare_guesses(kanji_list)
 
 

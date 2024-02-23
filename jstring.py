@@ -19,3 +19,18 @@ def _kanji_generator():
 
 
 kanji = "".join(_kanji_generator())
+
+
+hira_start = int("3041", 16)
+hira_end = int("3096", 16)
+kata_start = int("30a1", 16)
+
+hira_to_kata = dict()
+kata_to_hira = dict()
+for i in range(hira_start, hira_end + 1):
+    hira_to_kata[chr(i)] = chr(i - hira_start + kata_start)
+    kata_to_hira[chr(i - hira_start + kata_start)] = chr(i)
+
+
+def katakana_to_hiragana(text):
+    return "".join(kata_to_hira.get(char, char) for char in text)
