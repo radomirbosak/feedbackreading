@@ -28,7 +28,17 @@ def load_all_kanji():
 
 
 def load_kanji_list():
-    return load_all_kanji()
+    allk = load_all_kanji()
+
+    filtered = []
+    removed = []
+    for kanji in allk:
+        if len(kanji.onyomi) == 0:
+            removed.append(kanji)
+            continue
+        filtered.append(kanji)
+
+    return filtered, removed
 
 
 # guessing algorithm
@@ -53,17 +63,12 @@ def sprint(style, text):
 
 def compare_guesses(kanji_list):
     bad_count, good_count = 0, 0
-    no_onyomi_count = 0
     for kanji in kanji_list:
         guess = guess_reading(kanji)
-        try:
-            correct_reading = kanji.onyomi[0].text
-            # correct_reading = ",".join([on.text for on in kanji.onyomi])
-            # print(type(correct_reading))
-            correct_reading = katakana_to_hiragana(correct_reading)
-        except IndexError:
-            no_onyomi_count += 1
-            continue
+        correct_reading = kanji.onyomi[0].text
+        # correct_reading = ",".join([on.text for on in kanji.onyomi])
+        # print(type(correct_reading))
+        correct_reading = katakana_to_hiragana(correct_reading)
 
         ctx = dict(
             char=kanji.character,
@@ -80,17 +85,17 @@ def compare_guesses(kanji_list):
             bad_count += 1
         print(line.format(**ctx))
 
-    print("Kanji without any onyomi: {}/{}".format(no_onyomi_count, len(kanji_list)))
-    total_eligible = len(kanji_list) - no_onyomi_count
-
-    text = "{:>7.2%} complete".format(good_count / total_eligible)
+    text = "{:>7.2%} complete".format(good_count / len(kanji_list))
     sprint("highlight", text)
 
 
 def main():
     start = time()
-    kanji_list = load_kanji_list()
+    kanji_list, removed = load_kanji_list()
     compare_guesses(kanji_list)
+
+    # print various info
+    sprint("note", "Removed {} kanji with no onyomi".format(len(removed)))
 
     # print total time
     sprint("note", "Finished in {:.2f}s".format(time() - start))
