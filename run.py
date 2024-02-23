@@ -30,7 +30,7 @@ allk = load_all_kanji()
 
 
 def load_kanji_list():
-    return KANJI_LIST
+    return load_all_kanji()
 
 
 # guessing algorithm
@@ -49,17 +49,21 @@ def bad(text):
 def compare_guesses(kanji_list):
     bad_count, good_count = 0, 0
 
-    for kanji, correct_reading in kanji_list.items():
+    for kanji in kanji_list:
         guess = guess_reading(kanji)
+        try:
+            correct_reading = kanji.onyomi[0]
+        except IndexError:
+            continue
 
         if guess == correct_reading:
-            print(kanji, good(guess))
+            print(kanji.character, good(guess))
             good_count += 1
         else:
-            print(kanji, bad(guess), "->", correct_reading)
+            print(kanji.character, bad(guess), "->", correct_reading)
             bad_count += 1
 
-    print("{:.0%} complete".format(good_count / len(kanji_list)))
+    print("{:.2%} complete".format(good_count / len(kanji_list)))
 
 
 def main():
