@@ -83,11 +83,29 @@ def print_most_influental_radicals():
         print(radical, influence)
 
 
+def print_radical_to_reading_table():
+    radical_counters = get_radical_counters()
+    radical_influence = get_radical_influence()
+
+    table = {}
+    print("{")
+    for radical, influence in radical_influence:
+        counter = radical_counters[radical]
+        reading, count = counter.most_common(1)[0]
+        # print(radical, influence, reading)
+        # table[radical] = reading
+        print("  {!r}: {!r},  # {}/{}".format(radical, reading, count, influence))
+    print("}")
+
+    print("{} radicals printed".format(len(radical_influence)))
+
+
 def main():
     # print_most_common_readings()
     # print_most_common_radicals()
-    most_common_reading_for_radical()
     # print_most_influental_radicals()
+    # most_common_reading_for_radical()
+    print_radical_to_reading_table()
 
 
 if __name__ == "__main__":
