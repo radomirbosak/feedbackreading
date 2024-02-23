@@ -18,3 +18,12 @@ def radical(kanji):
     """
     guess = RADICAL_MAP.get(kanji.radical, "せい")
     return guess
+
+
+def constant_kou(kanji):
+    """
+    Best constant predictor.
+    See analyze.print_most_common_readings for most common readings
+    3.25% (67/2059)
+    """
+    return "こう"

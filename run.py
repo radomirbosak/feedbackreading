@@ -60,7 +60,7 @@ def load_kanji_list():
 # guessing algorithm
 def guess_reading(kanji):
     # return guesser.only_sei(kanji)
-    return guesser.radical(kanji)
+    return guesser.constant_kou(kanji)
 
 
 def sfmt(style, text):
