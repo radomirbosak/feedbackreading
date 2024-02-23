@@ -7,6 +7,7 @@ from time import time
 import numpy as np
 from termcolor import colored
 
+from guesser import only_sei
 from jstring import katakana_to_hiragana
 from kanji import Kanji
 
@@ -41,7 +42,7 @@ def load_kanji_list():
 
 # guessing algorithm
 def guess_reading(kanji):
-    return "せい"
+    return only_sei(kanji)
 
 
 def sfmt(style, text):
