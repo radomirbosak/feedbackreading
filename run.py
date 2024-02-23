@@ -2,6 +2,7 @@
 """
 TODO:
 * print errors as last
+* use krad parts to predict
 """
 import sys
 import warnings

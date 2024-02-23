@@ -22,6 +22,13 @@ or simply
 ```
 For a single evaluation.
 
+## TODO
+
+* print errors as last
+* use krad parts to predict
+* find largest atomic coincidental part power set subsets
+  * e.g. `["ハ", "目", "ハ目", "ハ目貝"]`
+
 ## Screenshot
 
 ![screenshot](screenshot.png)
