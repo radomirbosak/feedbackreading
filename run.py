@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 import warnings
+from time import time
 
-# import pandas as pd
 import numpy as np
 from termcolor import colored
 
@@ -27,9 +27,6 @@ def load_all_kanji():
     return [Kanji.from_series(k) for _, k in df.iterrows()]
 
 
-allk = load_all_kanji()
-
-
 def load_kanji_list():
     return load_all_kanji()
 
@@ -39,12 +36,19 @@ def guess_reading(kanji):
     return "せい"
 
 
-def good(text):
-    return colored(text, "light_green")
+def sfmt(style, text):
+    if style == "good":
+        return colored(text, "light_green")
+    if style == "bad":
+        return colored(text, "red", attrs=["bold"])
+    if style == "note":
+        return colored(text, "dark_grey")
+    if style == "highlight":
+        return colored(text, "white", "on_blue")
 
 
-def bad(text):
-    return colored(text, "red", attrs=["bold"])
+def sprint(style, text):
+    print(sfmt(style, text))
 
 
 def compare_guesses(kanji_list):
@@ -64,8 +68,8 @@ def compare_guesses(kanji_list):
         ctx = dict(
             char=kanji.character,
             guess=guess,
-            good_guess=good(guess),
-            bad_guess=bad(guess),
+            good_guess=sfmt("good", guess),
+            bad_guess=sfmt("bad", guess),
             correct=correct_reading,
         )
         if guess == correct_reading:
@@ -78,12 +82,18 @@ def compare_guesses(kanji_list):
 
     print("Kanji without any onyomi: {}/{}".format(no_onyomi_count, len(kanji_list)))
     total_eligible = len(kanji_list) - no_onyomi_count
-    print("{:.2%} complete".format(good_count / total_eligible))
+
+    text = "{:>7.2%} complete".format(good_count / total_eligible)
+    sprint("highlight", text)
 
 
 def main():
+    start = time()
     kanji_list = load_kanji_list()
     compare_guesses(kanji_list)
+
+    # print total time
+    sprint("note", "Finished in {:.2f}s".format(time() - start))
 
 
 if __name__ == "__main__":
