@@ -32,6 +32,7 @@ def load_all_kanji():
 
 allk = load_all_kanji()
 
+# guessing algorithm
 def guess_reading(kanji):
     return "せい"
 
@@ -40,24 +41,28 @@ def good(text):
 def bad(text):
     return colored(text, "red", attrs=["bold"])
 
+def main():
+    bad_count, good_count = 0, 0
 
-bad_count, good_count = 0, 0
+    for kanji, correct_reading in kanji_list.items():
+        guess = guess_reading(kanji)
 
-for kanji, correct_reading in kanji_list.items():
-    guess = guess_reading(kanji)
-
-    if guess == correct_reading:
-        print(kanji, good(guess))
-        good_count +=1
-    else:
-        print(kanji, bad(guess), "->", correct_reading)
-        bad_count += 1
+        if guess == correct_reading:
+            print(kanji, good(guess))
+            good_count +=1
+        else:
+            print(kanji, bad(guess), "->", correct_reading)
+            bad_count += 1
 
 
-print("{:.0%} complete".format(good_count / len(kanji_list)))
+    print("{:.0%} complete".format(good_count / len(kanji_list)))
 
-from pprint import pprint
-# pprint(allk)
+    from pprint import pprint
+    # pprint(allk)
 
-for kanji in allk[:10]:
-    print(kanji.character, kanji.onyomi)
+    for kanji in allk[:10]:
+        print(kanji.character, kanji.onyomi)
+
+
+if __name__ == "__main__":
+    main()
