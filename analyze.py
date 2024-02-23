@@ -5,7 +5,7 @@ from collections import Counter, defaultdict
 
 import numpy as np
 
-from jstring import katakana_to_hiragana
+from jstring import fw_ljust, katakana_to_hiragana
 from kanji import Kanji
 from krad import get_krads
 
@@ -111,13 +111,27 @@ def print_all_krad_parts():
     print("Found", len(allparts), "parts")
 
 
+def print_parts_to_readings():
+    # 253 parts
+    # 十戈冫⺾匚禸冊魚至宀亀并丶瓜殳儿マ鼠鼓韋谷｜大頁門邑入鳥革ヨ止鬲厶黹虫口干色矢廾子足犭米甘凵也夕巾彳乙屮長隶巛人毛刂艮二癶又髟岡灬龠久母鹿麦食肉豆井毋貝玄王禾鼻面耒牛麻冖刀高鬥ハ音臼广手木罒斤歹火竜鬯彑而羽亅黒舌西虍⺹山骨豸支曰巴糸氏冂卩亠⺌血亡辰瓦五牙勿士厂日文立走世角石欠黄囗衣寸疋里尤一𠆢水免田爻匕白攵幺及犬生ノ車滴几隹韭屯雨卜已羊皮無忄品女行目戸缶臣疒風比ユ青言川九尢舟爪首方衤舛斗土爿弓自釆聿弋辛无身金皿礻黍用馬鹵父元⻏扌氵⺅彡非斉夂酉巨心力香豕⻖气穴辶赤尸乃月奄歯飛矛鼎黽齊工竹見廴勹鬼小片示耳
+    for kanji in allk[:20]:
+        parts = allkrads[kanji.character]
+        parts_str = "".join(parts)
+        parts_str = fw_ljust(parts_str, 16)
+        readings_str = " ".join(kanji.onyomi_text)
+        print(
+            f"{kanji.index:>4}.", parts_str, "->", kanji.character, "->", readings_str
+        )
+
+
 def main():
     # print_most_common_readings()
     # print_most_common_radicals()
     # print_most_influental_radicals()
     # most_common_reading_for_radical()
     # print_radical_to_reading_table()
-    print_all_krad_parts()
+    # print_all_krad_parts()
+    print_parts_to_readings()
 
 
 if __name__ == "__main__":

@@ -1,3 +1,5 @@
+import unicodedata
+
 hiragana = (
     "ぁあぃいぅうぇえぉおかがきぎくぐけげこごさざしじすずせぜそぞただちぢっつづてでとどなにぬねのはばぱひびぴ ふぶぷへべぺほぼぽ"
     "まみむめもゃやゅゆょよらりるれろゎわゐゑをんゔゕゖ゙゚゛゜ゝゞゟ"
@@ -34,3 +36,15 @@ for i in range(hira_start, hira_end + 1):
 
 def katakana_to_hiragana(text):
     return "".join(kata_to_hira.get(char, char) for char in text)
+
+
+def visual_len(text):
+    WIDTH_MAP = {"W": 2, "Na": 1, "F": 2}
+    return sum(WIDTH_MAP[unicodedata.east_asian_width(char)] for char in text)
+
+
+def fw_ljust(text, width):
+    vlen = visual_len(text)
+    if vlen >= width:
+        return text
+    return text + " " * (width - vlen)
