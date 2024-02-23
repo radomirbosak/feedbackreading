@@ -13,12 +13,6 @@ from kanji import Kanji
 warnings.simplefilter(action="ignore", category=FutureWarning)
 import pandas as pd
 
-KANJI_LIST = {
-    "青": "せい",
-    "清": "せい",
-    "債": "さい",
-}
-
 
 def load_all_kanji():
     df = pd.read_csv("joyo.csv")
