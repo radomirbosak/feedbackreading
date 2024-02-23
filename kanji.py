@@ -82,6 +82,14 @@ class Kanji:
     def onyomi(self):
         return [r for r in self.readings if r.category == ReadingCat.Onyomi]
 
+    @property
+    def kunyomi_text(self):
+        return [r.text for r in self.kunyomi]
+
+    @property
+    def onyomi_text(self):
+        return [r.text for r in self.onyomi]
+
     @classmethod
     def from_series(cls, row: pd.Series):
         readings, _ = row["Readings"].split("\n", maxsplit=2)

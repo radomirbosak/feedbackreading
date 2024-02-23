@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import sys
 import warnings
 from time import time
 
@@ -30,6 +31,9 @@ def load_kanji_list():
         if len(kanji.onyomi) == 0:
             removed.append(kanji)
             continue
+        # if "セイ" not in kanji.onyomi_text and "ロウ" not in kanji.onyomi_text:
+        #     removed.append(kanji)
+        #     continue
         filtered.append(kanji)
 
     return filtered, removed
@@ -59,10 +63,17 @@ def compare_guesses(kanji_list):
     bad_count, good_count = 0, 0
     for kanji in kanji_list:
         guess = guess_reading(kanji)
-        correct_reading = kanji.onyomi[0].text
-        # correct_reading = ",".join([on.text for on in kanji.onyomi])
-        # print(type(correct_reading))
-        correct_reading = katakana_to_hiragana(correct_reading)
+        correct_readings = [on.text for on in kanji.onyomi]
+        correct_readings = [katakana_to_hiragana(on) for on in correct_readings]
+
+        # colorize readings
+        colored_readings = []
+        for reading in correct_readings:
+            if guess == reading:
+                colored_readings.append(sfmt("good", reading))
+            else:
+                colored_readings.append(reading)
+        colored_readings = " ".join(colored_readings)
 
         ctx = dict(
             char=kanji.character,
@@ -70,10 +81,10 @@ def compare_guesses(kanji_list):
             guess=guess,
             good_guess=sfmt("good", guess),
             bad_guess=sfmt("bad", guess),
-            correct=correct_reading,
+            correct=colored_readings,
         )
-        if guess == correct_reading:
-            line = "{char} ({rad}) {good_guess}"
+        if guess in correct_readings:
+            line = "{char} ({rad}) {good_guess} -> {correct}"
             good_count += 1
         else:
             line = "{char} ({rad}) {bad_guess} -> {correct}"
@@ -87,9 +98,13 @@ def compare_guesses(kanji_list):
 def main():
     start = time()
     kanji_list, removed = load_kanji_list()
+    if not kanji_list:
+        sprint("warn", "No eligible kanji, {} removed".format(len(removed)))
+        sys.exit(0)
     compare_guesses(kanji_list)
 
     # print various info
+    sprint("note", "Total {} kanji".format(len(kanji_list) + len(removed)))
     sprint("note", "Removed {} kanji with no onyomi".format(len(removed)))
 
     # print total time
