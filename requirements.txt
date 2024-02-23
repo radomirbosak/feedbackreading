@@ -1,3 +1,5 @@
 termcolor
 pandas
 numpy
+black
+isort

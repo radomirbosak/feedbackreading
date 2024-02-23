@@ -1,9 +1,8 @@
 from dataclasses import dataclass, field
-from typing import Optional
 from enum import Enum, auto
+from typing import Optional
 
 import pandas as pd
-
 
 from jstring import hiragana, katakana
 
@@ -13,6 +12,7 @@ def is_onyomi(reading):
     if pivot == "（":
         pivot = reading[1]
     return pivot in katakana
+
 
 def is_kunyomi(reading):
     pivot = reading[0]
@@ -87,15 +87,15 @@ class Kanji:
         readings, _ = row["Readings"].split("\n", maxsplit=2)
         readings = [Reading(r) for r in readings.split("、")]
 
-        year = row['Year added']
+        year = row["Year added"]
         return cls(
-            row['#'],
-            row['New (Shinjitai)'],
-            row['Old (Kyūjitai)'],
-            row['Radical'],
-            row['Strokes'],
-            row['Grade'],
+            row["#"],
+            row["New (Shinjitai)"],
+            row["Old (Kyūjitai)"],
+            row["Radical"],
+            row["Strokes"],
+            row["Grade"],
             int(year) if year else None,
-            row['English meaning'],
+            row["English meaning"],
             readings,
         )
