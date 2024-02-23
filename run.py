@@ -97,8 +97,10 @@ def compare_guesses(kanji_list):
 
         print_kanji_status(kanji, guess, correct_readings, is_correct)
 
-    text = "{:>7.2%} complete".format(good_count / len(kanji_list))
-    sprint("highlight", text)
+    total = len(kanji_list)
+    percent = "{:.2%}".format(good_count / total)
+    sprint("highlight", f"{percent:>7} complete")
+    sprint("note", f"{percent} ({good_count}/{total})")
 
 
 def main():
