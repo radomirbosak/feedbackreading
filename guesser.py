@@ -5,7 +5,11 @@ def only_sei(kanji):
     return "せい"
 
 
-RADICAL_MAP = {"肉": "わん"}
+RADICAL_MAP = {
+    "肉": "わん",
+    "水": "わん",
+    # "心": "わく",
+}
 
 
 def radical(kanji):

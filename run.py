@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
-
+"""
+TODO:
+* print errors as last
+"""
 import sys
 import warnings
+from pathlib import Path
 from time import time
 
 import numpy as np
@@ -14,6 +18,19 @@ from kanji import Kanji
 # fix pandas pyarrow warning
 warnings.simplefilter(action="ignore", category=FutureWarning)
 import pandas as pd
+
+CORRECT_FILEPATH = Path(".last_correct")
+
+
+def load_last_correct():
+    if not CORRECT_FILEPATH.exists():
+        return None
+    return int(CORRECT_FILEPATH.read_text())
+
+
+def save_last_correct(correct_num):
+    with CORRECT_FILEPATH.open("w") as fp:
+        fp.write(str(correct_num))
 
 
 def load_all_kanji():
@@ -83,6 +100,21 @@ def print_kanji_status(kanji, guess, correct_readings, is_correct):
     print(line.format(**ctx))
 
 
+def get_prec_diff_str(good, total):
+    before = load_last_correct()
+    if before is None:
+        return ""
+    delta = good - before
+    percent = delta / total
+    text = f"{percent:+.2%} ({delta:+d})"
+    if delta < 0:
+        return sfmt("bad", text)
+    if delta > 0:
+        return sfmt("good", text)
+    if delta == 0:
+        return sfmt("note", text)
+
+
 def compare_guesses(kanji_list):
     bad_count, good_count = 0, 0
     for kanji in kanji_list:
@@ -100,7 +132,13 @@ def compare_guesses(kanji_list):
 
     total = len(kanji_list)
     percent = "{:.2%}".format(good_count / total)
-    sprint("highlight", f"{percent:>7} complete")
+
+    # highlight
+    mainline = sfmt("highlight", f"{percent:>7} complete")
+    diff_str = get_prec_diff_str(good_count, total)
+    print(mainline, diff_str)
+    save_last_correct(good_count)
+
     sprint("note", f"{percent} ({good_count}/{total})")
 
 
