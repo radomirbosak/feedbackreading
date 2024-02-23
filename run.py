@@ -59,6 +59,27 @@ def sprint(style, text):
     print(sfmt(style, text))
 
 
+def print_kanji_status(kanji, guess, correct_readings, is_correct):
+    # colorize readings
+    colored_readings = []
+    for reading in correct_readings:
+        if guess == reading:
+            colored_readings.append(sfmt("good", reading))
+        else:
+            colored_readings.append(reading)
+    colored_readings = " ".join(colored_readings)
+    colored_guess = sfmt("good" if is_correct else "bad", guess)
+
+    ctx = dict(
+        char=kanji.character,
+        rad=kanji.radical,
+        guess=colored_guess,
+        correct=colored_readings,
+    )
+    line = "{char} ({rad}) {guess} -> {correct}"
+    print(line.format(**ctx))
+
+
 def compare_guesses(kanji_list):
     bad_count, good_count = 0, 0
     for kanji in kanji_list:
@@ -66,30 +87,13 @@ def compare_guesses(kanji_list):
         correct_readings = [on.text for on in kanji.onyomi]
         correct_readings = [katakana_to_hiragana(on) for on in correct_readings]
 
-        # colorize readings
-        colored_readings = []
-        for reading in correct_readings:
-            if guess == reading:
-                colored_readings.append(sfmt("good", reading))
-            else:
-                colored_readings.append(reading)
-        colored_readings = " ".join(colored_readings)
-
-        ctx = dict(
-            char=kanji.character,
-            rad=kanji.radical,
-            guess=guess,
-            good_guess=sfmt("good", guess),
-            bad_guess=sfmt("bad", guess),
-            correct=colored_readings,
-        )
-        if guess in correct_readings:
-            line = "{char} ({rad}) {good_guess} -> {correct}"
+        is_correct = guess in correct_readings
+        if is_correct:
             good_count += 1
         else:
-            line = "{char} ({rad}) {bad_guess} -> {correct}"
             bad_count += 1
-        print(line.format(**ctx))
+
+        print_kanji_status(kanji, guess, correct_readings, is_correct)
 
     text = "{:>7.2%} complete".format(good_count / len(kanji_list))
     sprint("highlight", text)
